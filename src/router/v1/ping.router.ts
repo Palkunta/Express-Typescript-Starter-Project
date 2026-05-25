@@ -1,5 +1,5 @@
 import express from "express";
-import { pingHandler } from "../controllers/ping.controller";
+import { pingHandler } from "../../controllers/ping.controller";
 
 
 const pingrouter = express.Router();
@@ -14,7 +14,11 @@ const pingrouter = express.Router();
 
 
 // chaining multiple middleware functions can be done like this..
-pingrouter.get("/ping", pingHandler); // this will define a route for the GET method on the /ping endpoint. When a request is made to this endpoint, the middleware1 and middleware2 functions will be called in order, and then the pingHandler function will be called to handle the request and send a response back to the client.
+pingrouter.get('/', pingHandler); // this will define a route for the GET method on the /ping endpoint. When a request is made to this endpoint, the middleware1 and middleware2 functions will be called in order, and then the pingHandler function will be called to handle the request and send a response back to the client.
+
+pingrouter.get('/health', (req , res) => {
+    res.status(200).send('OK');
+} )
 
 // middleware1 --> middleware2 --> pingHandler(ending middleware) --> response sent back to the client
 
