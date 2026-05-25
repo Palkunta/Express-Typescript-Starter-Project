@@ -12,17 +12,9 @@ const pingrouter = express.Router();
 // the advantage of this approach is that we can easily manage our routes by creating separate files for each route. We can also keep our server.ts file clean and organized. This way we can easily find the route handlers for each route and make changes to them without having to search through the entire server.ts file.
 
 
-function middleware1(req : Request , res : Response , next : NextFunction){
-    console.log("middleware1");
-    next(); // this will call the next middleware in the stack
-}
-function middleware2(req : Request , res : Response , next : NextFunction){
-    console.log("middleware2");
-    next(); // this will call the next middleware in the stack
-}
 
 // chaining multiple middleware functions can be done like this..
-pingrouter.get("/ping", middleware1, middleware2, pingHandler); // this will define a route for the GET method on the /ping endpoint. When a request is made to this endpoint, the middleware1 and middleware2 functions will be called in order, and then the pingHandler function will be called to handle the request and send a response back to the client.
+pingrouter.get("/ping", pingHandler); // this will define a route for the GET method on the /ping endpoint. When a request is made to this endpoint, the middleware1 and middleware2 functions will be called in order, and then the pingHandler function will be called to handle the request and send a response back to the client.
 
 // middleware1 --> middleware2 --> pingHandler(ending middleware) --> response sent back to the client
 
