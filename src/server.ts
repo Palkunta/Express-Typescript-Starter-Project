@@ -32,7 +32,7 @@ app.use('/api/v2',v2Router);
 //api versioning is a technique used to manage changes to an API over time. It allows developers to make changes to the API without breaking existing clients that rely on the old version of the API. By using versioning, developers can introduce new features, fix bugs, and make other changes to the API without affecting existing clients. This is typically done by including the version number in the URL of the API endpoints, such as /api/v1/ping or /api/v2/ping. This way, clients can specify which version of the API they want to use, and developers can maintain multiple versions of the API simultaneously.
 
 app.listen(serverConfig.PORT, () => {
-    console.log(`Server is running on port ${serverConfig.PORT}`);
+    console.log(`Server is running on port ${serverConfig.PORT}...`);
     console.log(`Press Ctrl+C to stop the server`);
 });
 
