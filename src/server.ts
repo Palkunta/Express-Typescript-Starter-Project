@@ -8,7 +8,7 @@ import {serverConfig} from './config';
 // import pingrouter from './router/v1/ping.router';
 import v1Router from './router/v1/index.router';
 import v2Router from './router/v2/index.router';
-
+import {z} from "zod";
 
 //const PORT = 3000; //implicitly typed as number, because we assigned a number value to it. TypeScript can infer the type of a variable based on the value assigned to it. In this case, since we assigned the number 3000 to the constant PORT, TypeScript infers that PORT is of type number. Therefore, we don't need to explicitly declare the type of PORT as number, as it is already inferred by TypeScript.
 
@@ -18,6 +18,10 @@ const app = express();
 //app.get("/ping",pingHandler); // kind of like routing work
 
 //passing your app object here and there is not a good idea, because it can lead to tight coupling between your modules and make it difficult to test and maintain your code. Instead, you can use a router to define your routes and then use the router in your server.ts file. This way, you can keep your server.ts file clean and organized, and you can easily manage your routes by creating separate files for each route.
+
+app.use(express.json()); // this will parse the incoming request body and make it available in the req.body property. This is useful for handling POST requests where the client sends data in the request body. By using express.json(), we can easily access the data sent by the client and use it in our route handlers.
+app.use(express.text());
+// app.use(express.urlencoded({extended:true})); // this will parse the incoming request body and make it available in the req.body property. This is useful for handling POST requests where the client sends data in the request body. By using express.urlencoded(), we can easily access the data sent by the client and use it in our route handlers. The extended option allows us to choose between parsing the URL-encoded data with the querystring library (when false) or the qs library (when true). The qs library allows for parsing nested objects, which can be useful for handling complex data structures in the request body.
 
 /**
  * Registering all the routers and their corresponding routes with the app object in the server.ts file is a good practice because it allows you to keep your server.ts file clean and organized. It also allows you to easily manage your routes by creating separate files for each route. This way, you can easily find the route handlers for each route and make changes to them without having to search through the entire server.ts file.
@@ -34,6 +38,18 @@ app.use('/api/v2',v2Router);
 app.listen(serverConfig.PORT, () => {
     console.log(`Server is running on port ${serverConfig.PORT}...`);
     console.log(`Press Ctrl+C to stop the server`);
+
+    const obj = {
+        name : "Kuntal",
+        age : 25
+    }//incoming obj that I want to test
+
+    const objSchema = z.object({
+        name : z.string(),
+        age : z.number().int().positive()
+    });// Expectation
+
+    console.log(objSchema.parse(obj));
 });
 
 // what app.use() does ?
