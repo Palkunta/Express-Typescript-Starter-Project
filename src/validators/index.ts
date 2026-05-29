@@ -1,6 +1,7 @@
 import { NextFunction,Request,Response } from "express";
 // import {  ZodObject } from "zod";
 import { ZodSchema } from "zod";
+import logger from "../config/logger.config";
 /**
  * 
  * @param schema - zod schema to validate the request body
@@ -10,13 +11,15 @@ import { ZodSchema } from "zod";
 export const validateRequestBody = (schema : ZodSchema) => { // on the go , take any req body schema , and create a middleware to validate that
     return async (req : Request , res : Response , next : NextFunction) : Promise<void>=> {
         try{
+            logger.info("Validating request body..;", { correlationId : req.headers['X-Correlation-ID']});
             await schema.parseAsync(req.body);
-            console.log("Request Body is valid..");
+            logger.info("Request Body is valid.." , { correlationId : req.headers['X-Correlation-ID']});
             next();
         }
         catch(err){
             // if the validation fails , then this catch block will be executed
             // res.status(400); // equiv to --> res = function (res) =>{ res.setStatus(400); return res; }
+            logger.error("Request Body is INVALID",{ correlationId : req.headers['X-Correlation-ID']});
             res.status(400).json({
                 //can pass javascript obj & that will be serialized to json
                 message : "Invalid request body",
