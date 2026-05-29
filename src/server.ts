@@ -9,6 +9,7 @@ import {serverConfig} from './config';
 import v1Router from './router/v1/index.router';
 import v2Router from './router/v2/index.router';
 import {z} from "zod";
+import { genericErrorHandler } from './middlewares/error.middleware';
 
 //const PORT = 3000; //implicitly typed as number, because we assigned a number value to it. TypeScript can infer the type of a variable based on the value assigned to it. In this case, since we assigned the number 3000 to the constant PORT, TypeScript infers that PORT is of type number. Therefore, we don't need to explicitly declare the type of PORT as number, as it is already inferred by TypeScript.
 
@@ -32,6 +33,11 @@ app.use("/api/v1", v1Router); // this will use the pingrouter for all the routes
 app.use('/api/v2',v2Router);
 // any middleware that you register using app.use()....will be applicable to all the requests
 
+/**
+ * After all of your routers have been added..
+ * --> add the errorHandler middleware
+ */
+app.use(genericErrorHandler); //ensures instead of default express errorHandler , this custom errorhandler will be injected
 
 //api versioning is a technique used to manage changes to an API over time. It allows developers to make changes to the API without breaking existing clients that rely on the old version of the API. By using versioning, developers can introduce new features, fix bugs, and make other changes to the API without affecting existing clients. This is typically done by including the version number in the URL of the API endpoints, such as /api/v1/ping or /api/v2/ping. This way, clients can specify which version of the API they want to use, and developers can maintain multiple versions of the API simultaneously.
 
@@ -54,3 +60,7 @@ app.listen(serverConfig.PORT, () => {
 
 // what app.use() does ?
 // app.use() is a method provided by Express.js that allows you to register middleware functions with the app object. Middleware functions are functions that have access to the request and response objects, and can modify them or perform other operations before passing control to the next middleware function in the chain. In this case, we are using app.use() to register the pingrouter as a middleware function, which will handle all requests that match the routes defined in the pingrouter.
+
+
+// final middleware as of now is the ping.controller...
+//validator_middleware --> controller(if some err) --> nextMiddleware(default error handler)
